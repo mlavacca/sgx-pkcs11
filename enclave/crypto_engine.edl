@@ -1,0 +1,30 @@
+enclave {
+    
+from "sgx_tsgxssl.edl" import *;
+
+	trusted {
+		public void generateRSAKeyPair(
+			[out, count=RSAKeysLength]char* RSAPublicKey,
+			[out, count=RSAKeysLength]char* RSAPrivateKey,
+			size_t RSAKeysLength
+		);
+
+		public void SGXEncryptRSA(
+		[in, readonly, count=public_key_length]const char* public_key, size_t public_key_length,
+		[in, readonly, count=plaintext_length]const char* plaintext, size_t plaintext_length,
+		[out, count=ciphertext_length]char* ciphertext, size_t ciphertext_length,
+		[out, count=1]int* cipherTextLength
+		);
+
+		public void SGXDecryptRSA(
+		[in, readonly, count=private_key_ciphered_length]const char* private_key_ciphered, size_t private_key_ciphered_length,
+		[in, readonly, count=ciphertext_length]const char* ciphertext, size_t ciphertext_length,
+		[out, count=plaintext_length]char* plaintext, size_t plaintext_length,
+		[user_check]int* plainTextLength
+		);
+    };
+
+    untrusted {
+
+    }; 
+};
